@@ -94,6 +94,23 @@ impl LockManager {
         }
     }
 
+    pub fn with_client(server: Client) -> LockManager {
+        Self::with_clients(vec![server])
+    }
+
+    /// Create a new lock manager instance, defined by the given Redis client instance.
+    /// Quorum is defined to be N/2+1, with N being the number of given Redis instances.
+    pub fn with_clients(servers: Vec<Client>) -> LockManager {
+        let quorum = (servers.len() as u32) / 2 + 1;
+
+        LockManager {
+            servers,
+            quorum,
+            retry_count: DEFAULT_RETRY_COUNT,
+            retry_delay: DEFAULT_RETRY_DELAY,
+        }
+    }
+
     /// Get 20 random bytes from the pseudorandom interface.
     pub fn get_unique_lock_id(&self) -> io::Result<Vec<u8>> {
         || -> Result<Vec<u8>, io::Error> {
