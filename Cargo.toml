@@ -18,8 +18,11 @@ license = "BSD-3-Clause"
 readme = "README.md"
 edition = "2021"
 
+[features]
+tls = ["redis/tls", "redis/tokio-native-tls-comp"]
+
 [dependencies]
-redis = { version = "0.21.6", features = ["async-std-comp"] }
+redis = { version = "0.23", features = ["aio", "tokio-comp"] }
 tokio = { version = "1.27.0", features = ["rt", "time"] }
 rand = "0.8.5"
 futures = "0.3.24"
